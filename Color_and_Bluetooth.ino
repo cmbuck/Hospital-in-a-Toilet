@@ -11,10 +11,14 @@
  */
 #include <SoftwareSerial.h>  
 
+#define DEBUG 1
+
 int bluetoothTx = 2;  // TX-O pin of bluetooth mate, Arduino D2
 int bluetoothRx = 3;  // RX-I pin of bluetooth mate, Arduino D3
 int sensorRx = 4;     // Rx pin on arduino for sensor, D4
 int sensorTx = 5;     // Tx pin on arduino for sensor, D5
+int LEDpin = 13;
+int waiting = 0;
 String inputstring = "";
 String sensorstring = "";
 boolean input_stringcomplete = false;
@@ -38,6 +42,7 @@ void setup()
   sensor.begin(38400);
   inputstring.reserve(10); 
   sensorstring.reserve(30); 
+  pinMode(LEDpin, OUTPUT);
 }
 
 //Interrupt routine
@@ -50,35 +55,57 @@ void serialEvent() {
 
 void loop()
 {
-  if(bluetooth.available())  // If the bluetooth sent any characters
+  while(bluetooth.available())  // If the bluetooth sent any characters
   {
     // Send any characters the bluetooth prints to the serial monitor
     Serial.print((char)bluetooth.read());  
   }
   
-  if(Serial.available())  // If stuff was typed in the serial monitor
+  while(Serial.available())  // If stuff was typed in the serial monitor
   {
     // Send any characters the Serial monitor prints to the bluetooth
     //bluetooth.print((char)Serial.read());
-    sensor.print((char)Serial.read());
+    //sensor.print((char)Serial.read());
+    
+    char inchar = (char)Serial.read(); 
+    inputstring += inchar; 
+    if (inchar == '\r') {
+      input_stringcomplete = true;
+      waiting = 1;
+    } 
   }
   
-  /*
+  
   if (input_stringcomplete){ 
-    sensor.print(inputstring); 
+    while (waiting)
+    {
+      sensor.print(inputstring); 
+      delay(1300);
+      if (sensor.available())
+      {
+        waiting = 0;
+      }
+    }
     inputstring = ""; 
     input_stringcomplete = false; 
-  }*/
+    
+  }
   
   while (sensor.available()) { 
     char inchar = (char)sensor.read(); 
     sensorstring += inchar; 
-    if (inchar == '\r') {sensor_stringcomplete = true;} 
+    if (inchar == '\r') 
+    {
+      sensor_stringcomplete = true;
+      digitalWrite(LEDpin, !digitalRead(LEDpin));
+    } 
   }
   
   if (sensor_stringcomplete){ 
     //Serial.print(sensorstring); 
-    bluetooth.print(sensorstring);
+    bluetooth.println(sensorstring);
+    if (DEBUG)
+      Serial.println(sensorstring);
     sensorstring = ""; 
     sensor_stringcomplete = false; 
   }
