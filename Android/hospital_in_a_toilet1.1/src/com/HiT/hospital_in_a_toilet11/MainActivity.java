@@ -1,54 +1,30 @@
-package com.example.hospital_in_a_toilet;
+package com.HiT.hospital_in_a_toilet11;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Locale;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.example.hospital_in_a_toilet.RGB_Wrapper;
-
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
-import android.provider.Settings.Secure;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class MainActivity extends FragmentActivity implements
-ActionBar.TabListener {
-
-    private String base_url = "http://ec2-54-237-70-7.compute-1.amazonaws.com/";
-
-    private SeekBar seekBar;
-
-    private ArrayList<RGB_Wrapper> user_history;
+public class MainActivity extends ActionBarActivity implements
+		ActionBar.TabListener {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-	 * will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a
+	 * fragments for each of the sections. We use a {@link FragmentPagerAdapter}
+	 * derivative, which will keep every loaded fragment in memory. If this
+	 * becomes too memory intensive, it may be best to switch to a
 	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
@@ -64,11 +40,11 @@ ActionBar.TabListener {
 		setContentView(R.layout.activity_main);
 
 		// Set up the action bar.
-		final ActionBar actionBar = getActionBar();
+		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Create the adapter that will return a fragment for each of the three
-		// primary sections of the app.
+		// primary sections of the activity.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
 
@@ -101,9 +77,22 @@ ActionBar.TabListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -159,7 +148,7 @@ ActionBar.TabListener {
 
 		@Override
 		public int getCount() {
-			// Show 2 total pages.
+			// Show 3 total pages.
 			return 2;
 		}
 
@@ -176,10 +165,6 @@ ActionBar.TabListener {
 		}
 	}
 
-	/**
-	 * A trends segment fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
 	public static class TrendsSectionFragment extends Fragment {
 		/**
 		 * The fragment argument representing the section number for this
@@ -230,94 +215,4 @@ ActionBar.TabListener {
 		}
 	}
 
-
-// 
-
-	public void receive_from_server()
-	{
-		String android_id = Secure.getString(getBaseContext().getContentResolver(),
-                Secure.ANDROID_ID); 
-		String request = base_url + "get_data.php?username=" + android_id +
-				"&number=5";
-		connect_to_server(request,true);
-	}
-
-	public void connect_to_server(final String request, final boolean toAdd) {
-		Thread trd = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				
-				HttpClient httpClient = new DefaultHttpClient();
-				HttpGet httpGet = new HttpGet(request);
-
-				// Making HTTP Request
-				try {
-					HttpResponse response = httpClient.execute(httpGet);
-
-					// writing response to log
-					InputStream in = response.getEntity().getContent();
-					BufferedReader reader = new BufferedReader(
-							new InputStreamReader(in));
-					StringBuilder str = new StringBuilder();
-					String line = null;
-					while ((line = reader.readLine()) != null) {
-						str.append(line);
-					}
-					in.close();
-
-					Log.d("HTML", str.toString());
-					if(toAdd){
-					try {
-						final JSONObject json = new JSONObject(str.toString());
-						
-						for(Integer i=0;i<json.length();i++)
-						{
-							String res = json.getString(i.toString());
-							final JSONObject json_2 = new JSONObject(res);
-							String R = json_2.getString("R");
-							String G = json_2.getString("G");
-							String B = json_2.getString("B");
-							String SENT_TIME = json_2.getString("SENT_TIME");
-							Log.e("JSON", R + G + B +SENT_TIME);
-							RGB_Wrapper rgb = new RGB_Wrapper(Float.parseFloat(R),Float.parseFloat(G),Float.parseFloat(B));
-							rgb.setDate(SENT_TIME);
-							user_history.add(rgb);
-							
-						}
-						seekBar.setMax(user_history.size());
-						
-						Log.d("SIZE",String.valueOf(seekBar.getMax()));
-						
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-					}
-
-				} catch (ClientProtocolException e) {
-					// writing exception to log
-					e.printStackTrace();
-
-				} catch (IOException e) {
-					// writing exception to log
-					e.printStackTrace();
-				}
-			}
-		});
-		trd.start();
-	}
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
