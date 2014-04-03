@@ -139,6 +139,13 @@ int dimen abc_search_view_preferred_width 0x7f08000d
 int dimen abc_search_view_text_min_width 0x7f08000c
 int dimen activity_horizontal_margin 0x7f080011
 int dimen activity_vertical_margin 0x7f080012
+int dimen domain_label_font_size 0x7f080015
+int dimen domain_tick_label_font_size 0x7f080018
+int dimen legend_text_font_size 0x7f080019
+int dimen pie_segment_label_font_size 0x7f080013
+int dimen range_label_font_size 0x7f080016
+int dimen range_tick_label_font_size 0x7f080017
+int dimen title_font_size 0x7f080014
 int drawable abc_ab_bottom_solid_dark_holo 0x7f020000
 int drawable abc_ab_bottom_solid_light_holo 0x7f020001
 int drawable abc_ab_bottom_transparent_dark_holo 0x7f020002
@@ -238,7 +245,7 @@ int id action_context_bar 0x7f05001d
 int id action_menu_divider 0x7f050016
 int id action_menu_presenter 0x7f050017
 int id action_mode_close_button 0x7f050024
-int id action_settings 0x7f05003e
+int id action_settings 0x7f05003f
 int id activity_chooser_view_content 0x7f050025
 int id always 0x7f05000b
 int id beginning 0x7f050011
@@ -260,6 +267,7 @@ int id image 0x7f050027
 int id listMode 0x7f050001
 int id list_item 0x7f050029
 int id middle 0x7f050012
+int id mySimpleXYPlot 0x7f05003e
 int id never 0x7f050009
 int id none 0x7f050010
 int id normal 0x7f050000
