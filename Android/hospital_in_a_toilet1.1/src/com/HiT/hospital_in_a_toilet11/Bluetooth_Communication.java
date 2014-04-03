@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -24,9 +25,11 @@ import com.HiT.hospital_in_a_toilet11.RunningAverager;
 
 
 
-public class Bluetooth {
+public class Bluetooth_Communication {
 
 	private static final int REQUEST_ENABLE_BT = 10;
+	private EditText statusLabel;
+
 	private TextView status_label;
 	private static final String MAC_ADDRESS ="00:06:66:4E:3E:8D";
     Thread workerThread;
