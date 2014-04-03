@@ -52,7 +52,7 @@ public class Bluetooth_Communication {
 	{
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
-		    Log.e("No BT on device", "hehe");
+		    Log.e("No BT on device", "No BT on device");
 		}
 		Log.e("LOL","what");
 		if (!mBluetoothAdapter.isEnabled()) {
@@ -61,7 +61,7 @@ public class Bluetooth_Communication {
 		}
 		
 		if (mBluetoothAdapter.isDiscovering()) {
-			Log.e("what", "Already Discovering...");
+			Log.e("Already Discovering...", "Already Discovering...");
 		    mBluetoothAdapter.cancelDiscovery();
 		}
 		boolean is_paired = false;
