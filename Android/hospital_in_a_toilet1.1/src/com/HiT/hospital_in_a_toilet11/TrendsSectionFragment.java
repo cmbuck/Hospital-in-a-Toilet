@@ -52,7 +52,7 @@ public class TrendsSectionFragment extends Fragment {
         // and configure it from xml:
         LineAndPointFormatter series1Format = new LineAndPointFormatter();
         series1Format.setPointLabelFormatter(new PointLabelFormatter());
-        series1Format.configure(getApplicationContext(),
+        series1Format.configure(getActivity().getApplicationContext(),
                 R.xml.line_point_formatter_with_plf1);
  
         // add a new series' to the xyplot:
@@ -61,7 +61,7 @@ public class TrendsSectionFragment extends Fragment {
         // same as above:
         LineAndPointFormatter series2Format = new LineAndPointFormatter();
         series2Format.setPointLabelFormatter(new PointLabelFormatter());
-        series2Format.configure(getApplicationContext(),
+        series2Format.configure(getActivity().getApplicationContext(),
                 R.xml.line_point_formatter_with_plf2);
         plot.addSeries(series2, series2Format);
  
