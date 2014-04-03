@@ -27,11 +27,13 @@ import com.HiT.hospital_in_a_toilet11.RGB_Wrapper;
 public class Server_Communication {
 	
     private ArrayList<RGB_Wrapper> user_history;
-    private static RGB_Wrapper last_collected;
 	private SeekBar seekBar;
     private String base_url = "http://ec2-54-237-70-7.compute-1.amazonaws.com/";
-
+    private String android_id;
 	
+    public Server_Communication(String android_id){
+    	this.android_id = android_id;
+    }
 	
 	
 	public void connect_to_server(final String request, final boolean toAdd) {
@@ -100,16 +102,12 @@ public class Server_Communication {
 	
 	public void register_on_server()
 	{
-		String android_id = Secure.getString(getBaseContext().getContentResolver(),
-                Secure.ANDROID_ID); 
 		String request = base_url + "new_user.php?username=" + android_id + "&weight=60";
 		connect_to_server(request, false);
 	}
 
 	public void send_to_server(RGB_Wrapper rgb)
 	{
-		String android_id = Secure.getString(getBaseContext().getContentResolver(),
-                Secure.ANDROID_ID); 
 		String request = base_url + "receive_data.php?username=" + android_id +
 				"&R=" + rgb.getR() + "&G=" +rgb.getG() + "&B=" +rgb.getB();
 		connect_to_server(request, false);
@@ -117,8 +115,6 @@ public class Server_Communication {
 	
 	public void receive_from_server()
 	{
-		String android_id = Secure.getString(getBaseContext().getContentResolver(),
-                Secure.ANDROID_ID); 
 		String request = base_url + "get_data.php?username=" + android_id +
 				"&number=5";
 		connect_to_server(request,true);
