@@ -91,14 +91,19 @@ void loop()
     
   }
   
-  while (sensor.available()) { 
-    char inchar = (char)sensor.read(); 
+  //while (sensor.available()) { 
+  if (1) {
+    //char inchar = (char)sensor.read(); 
+    char inchar = '9';
+    sensorstring += inchar; 
+    inchar = '\r';
     sensorstring += inchar; 
     if (inchar == '\r') 
     {
       sensor_stringcomplete = true;
       digitalWrite(LEDpin, !digitalRead(LEDpin));
     } 
+    delay(100);
   }
   
   if (sensor_stringcomplete){ 
