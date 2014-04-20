@@ -55,6 +55,11 @@ void setup() {
   delay(100);
 }
 
+int  cal_pressure(unsigned int output) {
+  pressure = 149*(output -1638)/13107+1;
+  return pressure;
+}
+
 void loop() {
   //Select High Resolution Mode
   //writeRegister(0x03, 0x0A);
